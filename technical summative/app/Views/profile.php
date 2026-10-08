@@ -1,3 +1,4 @@
+<?= view('_start',['pageTitle'=>'Developer Profile']) ?>
 <h1>Developer Profile</h1>
 
 
@@ -17,3 +18,4 @@ Name:
 Email:
 <?= esc($user['email']) ?>
 </p>
+<?= view('_end') ?>

@@ -1,0 +1,3 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title><?= esc($pageTitle ?? 'Task Management System') ?></title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:36px auto;padding:0 20px;line-height:1.6;color:#172033}a{color:#176b58}button,.button{padding:7px 13px;cursor:pointer}input,select{padding:8px;margin:4px 0 12px;max-width:100%}label{display:block;font-weight:bold}.task{padding:12px 16px;border:1px solid #ddd;border-radius:8px;margin:10px 0}.error{color:#b42318}.success{color:#12643a}</style></head><body>
+<?= view('_nav') ?>
+<?php if (session()->getFlashdata('success')): ?><p class="success"><?= esc(session()->getFlashdata('success')) ?></p><?php endif; ?>

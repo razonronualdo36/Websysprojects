@@ -1,69 +1,30 @@
-# CodeIgniter 4 Application Starter
+# Tasks for Today Management System — TSA2
 
-## What is CodeIgniter?
+Based on the original TSA1 project from Websysprojects-main.zip. Keeps the original landing page at `/` and Today's Tasks at `/welcome`.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Requirements
+- PHP 8.2+ and MySQL/MariaDB
+- Composer (framework dependencies are NOT in this repository)
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Local setup
+1. In the project root, run `composer install` to create `vendor/`.
+2. Copy `.env.example` to `.env`. Configure database connection and base URL for your environment.
+3. In phpMyAdmin, **select the `task_management` database** first, then use Import:
+   - Existing TSA1 database: run `database/upgrade_TSA1_to_TSA2.sql` in its SQL tab **once**. Do not reimport the fresh SQL over your existing data.
+   - New empty database: import `database/task_management_TSA2_fresh.sql`.
+4. Run `php setup-password.php ronualdo` in a local terminal. Choose a unique 12+ character password. Copy the printed UPDATE SQL into phpMyAdmin's SQL tab for the correct database. Do not commit credentials.
+5. Run `php spark serve`, visit http://localhost:8080/ and log in at `/login`.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Routes
+- Public GET: `/`, `/welcome`, `/tasks`, `/profile`, `/about`, `/login`
+- Protected GET: `/tasks/new`, `/tasks/{id}/edit`
+- Protected POST: `/tasks` (create), `/tasks/{id}/update`, `/tasks/{id}/archive`, `/logout`
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Security
+Passwords use PHP `password_hash` and `password_verify`. Management routes use an auth filter, and all mutation routes use POST and CSRF tokens. Tasks are archived via `is_archived=1`; public listings exclude them. Use production environment and a strong password when deployed. Do not expose `.env` or place `app/`, `vendor/`, or `writable/` under a public web directory when possible.
 
-## Installation & updates
+## InfinityFree
+For an existing hosted TSA1 installation, back up files and database first. Update app files, then run upgrade SQL against the hosted database (only if columns do not already exist). Keep the existing hosting-specific `.env` and working `.htaccess`. Install Composer dependencies locally and upload `vendor/` if the host does not run Composer. The secure recommended structure has `app/`, `vendor/`, and `writable/` outside public `htdocs`, with the **contents** of `public/` inside `htdocs`; adjust `index.php` paths accordingly. Never publish your `.env` or SQL backups.
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
-
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
-
-## Setup
-
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
-
-## Important Change with index.php
-
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.2 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## Verification
+Test logged-out GET `/tasks/new` redirects to `/login`, successful login, create/update/archive, archived rows disappear from `/welcome` and `/tasks`, and logout. No live database or InfinityFree tests were performed in this package environment.
