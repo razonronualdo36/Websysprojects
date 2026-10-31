@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Customer Accounts</h1>
-    <p>Below is the list of registered customers.</p>
+    <p>Below is the list of registered customers retrieved from the database.</p>
 
     <table>
         <thead>
@@ -19,10 +19,10 @@
         <tbody>
             @foreach ($customers as $customer)
                 <tr>
-                    <td>{{ $customer['id'] }}</td>
-                    <td>{{ $customer['name'] }}</td>
-                    <td>{{ $customer['email'] }}</td>
-                    <td>{{ $customer['phone'] }}</td>
+                    <td>{{ $customer->id }}</td>
+                    <td>{{ $customer->full_name }}</td>
+                    <td>{{ $customer->email }}</td>
+                    <td>{{ $customer->phone }}</td>
                 </tr>
             @endforeach
         </tbody>
