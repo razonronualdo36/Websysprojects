@@ -4,7 +4,17 @@
 
 @section('content')
     <h1>Customer Accounts</h1>
-    <p>Below is the list of registered customers retrieved from the database.</p>
+    <p>Manage the customer records stored in the database.</p>
+
+    @if (session('success'))
+        <div class="alert success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <a class="button" href="{{ route('customers.create') }}">
+        Create Customer
+    </a>
 
     <table>
         <thead>
@@ -13,6 +23,7 @@
                 <th>Full Name</th>
                 <th>Email Address</th>
                 <th>Phone Number</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -23,6 +34,14 @@
                     <td>{{ $customer->full_name }}</td>
                     <td>{{ $customer->email }}</td>
                     <td>{{ $customer->phone }}</td>
+                    <td>
+                        <a
+                            class="button small"
+                            href="{{ route('customers.edit', $customer) }}"
+                        >
+                            Edit
+                        </a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
